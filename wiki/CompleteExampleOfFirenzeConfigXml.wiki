@@ -13,8 +13,6 @@
       <setproperty name="dayInWeekDate" type="groovy">$entry.publishedDate?.format('EEEEEEEEEE')</setproperty>     
       <setproperty name="slashPubDate" type="groovy">$entry.publishedDate?.format('dd/MM/yyyy')</setproperty>     
       <setproperty name="shortPubDate" type="groovy">$entry.publishedDate?.format('ddMM')</setproperty>     
-      <!-- define download condition : only enclosures with published date more recent than the last downloaded enclosure -->     
-      <downloadcondition type="groovy">$entry.publishedDate?.after($history.lastPubDate)</downloadcondition>
       <!-- define destination sub-folder -->     
       <destinationfolder>$feed.title</destinationfolder>      
       <!-- define destination file -->     
