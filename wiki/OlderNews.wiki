@@ -1,0 +1,15 @@
+=Older news=
+  * 15/01/2010 : *Firenze 3.2 released*
+    * support for Groovy and more generally all JSR-223 scripting language
+  * 19/06/2009 : *Firenze 3.1 released* 
+    * support for BSF (Bean Scripting Framework)
+    * some improvements in the multithreading download tasks
+  * 27/02/2008 : *Firenze 3.0 released* 
+    * support for xpath expression                                                                
+  * 05/09/2007 : *Firenze 2.2 released* 
+    * most reported bugs fixed
+    * some numerous small improvements
+    * new logo at startup and copy utils.
+  * 31/07/2007 : *Firenze 2.1 released*
+  * 16/07/2007 : *Firenze 2.0 released* 
+    * migration to JDK 5 and Rome 0.9 API
