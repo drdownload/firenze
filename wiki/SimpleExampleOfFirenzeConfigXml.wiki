@@ -1,6 +1,8 @@
 {{{
 <!-- A very simple Firenze configuration file -->
-<firenze-config xmlns="http://berlios.de/ns/firenze/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://berlios.de/ns/firenze/ firenze-config.xsd ">  
+<firenze-config xmlns="http://berlios.de/ns/firenze/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://berlios.de/ns/firenze/ firenze-config.xsd ">  
   <settings>
     <!-- set attribute dir : root directory to store downloaded enclosures -->
     <download dir="C:/app/firenze" maxdownloads="10" />
