@@ -1,6 +1,6 @@
 {{{
 <!-- A more complex Firenze configuration file -->
-<firenze-config xmlns="http://berlios.de/ns/firenze/"
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/"
                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="http://berlios.de/ns/firenze/ firenze-config.xsd ">  
   <settings>
