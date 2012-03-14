@@ -10,7 +10,6 @@
     <proxy useSystemProxies="true"/>
     <global-feed>
       <!-- define for all feeds : properties : published date with different format -->
-      <setproperty name="dayInWeekDate" type="groovy">$entry.publishedDate?.format('EEEEEEEEEE')</setproperty>     
       <setproperty name="slashPubDate" type="groovy">$entry.publishedDate?.format('dd/MM/yyyy')</setproperty>     
       <setproperty name="shortPubDate" type="groovy">$entry.publishedDate?.format('ddMM')</setproperty>     
       <!-- define destination sub-folder -->     
@@ -26,7 +25,7 @@
    <!-- this feed is enabled and redefines download condition and destination file with groovy expression --> 
    <feed id="The Business Week" url="http://www.businessweek.com/search/podcasts/thebusinessweek.rss" enabled="false">
       <!-- define download condition : only enclosure urls not already downloaded and published friday -->     
-      <downloadcondition type="groovy">$dayInWeekDate == 'vendredi'</downloadcondition>   
+      <downloadcondition type="groovy">$entry.publishedDate.isFriday()</downloadcondition>   
       <!-- redefine dest file with a complex groovy expression  : use subtitle itune tag is not null and title otherwise -->
       <destinationfile type="groovy">$entry_itunes.subtitle ? "BusinessWeek-"+$entry_itunes.subtitle+$ext : "BusinessWeek-"+$entry.title+$ext</destinationfile>      
    </feed>
@@ -40,9 +39,9 @@
       <postdownloadaction>del /Q "$filePath"</postdownloadaction>
    </feed>
     <feed id="masque" url="http://radiofrance-podcast.net/podcast09/rss_14007.xml" enabled="true">
-      <xpathproperty name="httpInfo" url="http://www.radiofrance.fr/franceinter/em/lemasqueetlaplume/archives.php" default="$entry.title">
+      <setproperty name="httpInfo" url="http://www.radiofrance.fr/franceinter/em/lemasqueetlaplume/archives.php" default="$entry.title">
         //li[strong[. = '$slashPubDate']]/a/text()
-      </xpathproperty>
+      </setproperty>
       <destinationfile type="groovy">"Masque"+$httpInfo+$shortPubDate+$ext</destinationfile>
     </feed>     
   </feeds>
