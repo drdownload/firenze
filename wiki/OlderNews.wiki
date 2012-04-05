@@ -1,4 +1,16 @@
 =Older news=
+  * 05/11/2010 : *Firenze 4.5 released* 
+    * add ID3 mp3 tags management with the great [http://www.fightingquaker.com/myid3/ MyID3 library] : you can now update any tags of your mp3 enclosures automatically after download ! 
+    * correction in encoding management
+    * modification : splitaction element becomes splitmp3
+  * 30/10/2010 : *Firenze 4.2 released* 
+    * correction thanks to *Tanel Alumäe* : firenze command works now on linux and unix platform
+  * 05/10/2010 : *Firenze 4.1 released*
+    * correction thanks to *Daniel Schien* : firenze includes now itunes-0.4-tafix2.jar (instead of itunes-0.4.jar) to fix a problem of duration element
+  * 30/09/2010 : *Firenze 4.0 released* 
+    * migration to JDK 6.0
+    * htmlproperty is no longer used and replaced by xpathproperty
+    * pattern attribute is no longer used for property element. Use groovy expression instead.
   * 15/01/2010 : *Firenze 3.2 released*
     * support for Groovy and more generally all JSR-223 scripting language
   * 19/06/2009 : *Firenze 3.1 released* 
