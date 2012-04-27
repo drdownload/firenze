@@ -1,0 +1,1082 @@
+<wiki:toc max_depth="2" />
+
+=Getting notified of Firenze releases=
+You can subscribe to Firenze releases via this [http://code.google.com/feeds/p/firenze/downloads/basic RSS feed].
+
+=Overview=
+Firenze is an open-source java command-line podcast aggregator.
+
+Firenze downloads and manages free audio or video content ("podcasts") and articles (news) for you.
+
+List of features :
+  * Croos-platform program (Java based)
+  * Multiple simultaneous downloads
+  * Resume partial downloads
+  * Scheduled downloads
+  * Simplicity and ease of use
+  * Command-line scriptable
+  * Conditional download : user-defined download condition
+  * Proxy server support
+  * Https support
+  * Support for specific protocols : *feed://* , *itms://* , *itpc://* , *pcast://* and *podcast://*
+  * User-defined destination file and folder name (support for all rss tags included [http://www.itunes.com itunes] tags)
+  * Highly configurable for advanced users with full support of [https://scripting.dev.java.net/ JSR-223 java scripting language] like [http://groovy.codehaus.org/ groovy].
+  * Extracting additional informations from http page with xpath support
+  * Importing and exporting your feed subscriptions (support OPML format)
+  * Podcast features : 
+    ** Managing ID3 mp3 tags
+    ** Split mp3 file after download
+    ** Launching a command after download (convert media content, timestretching, ...)
+    ** Synchronising podcasts to your mp3 player
+    ** Creation of playlist (support M3U format)
+  * News features : 
+    ** Offline reading mode (download only the text content of the news)
+    ** Support for google reader : access to your account, retrieve the unread news, use the googe reader archiving feature to retrieve an old news
+    ** Launching a command after download (conversion for eBook, ...)
+    ** Synchronising articles to your device (eBook, notebook, smartphone, ...)
+
+
+=News=
+
+  * 20/04/2012 : *Firenze 6.0 released* 
+    * fix url file name management
+    * simplify postdownloadactions : ability to group actions into the same element
+    * add baseName and basePath properties to simplify action
+    * the default destination folder is the title of the feed if the id is not set 
+
+  * 20/04/2012 : *Firenze 5.9 released* 
+    * fix encoding management
+    * fix enclosureurl management
+
+  * 06/04/2012 : *Firenze 5.8 released* 
+    * add news aggregator feature : you can retrieve articles from a feed.
+    * add offline reading feature : you can extract the text content of an article to read offline
+    * add google reader support : you can access to your google reader account
+
+  * 23/03/2012 : *Firenze 5.7 released* 
+    * attribute overriddenFile of download element is removed : in conflict with resume partial download feature
+    * attribute id of feed element becomes optional : by default identifier for a feed is the url. But the feed id must be unique : an error is thrown if two feeds without id have the same url.
+    * prompt the user for the creation of the configuration at the first launch
+    * migration of the history data file : from properties to the more readable and editable xml format (the properties file is saved after the migration).
+
+  * 19/03/2012 : *Firenze 5.6 released* 
+    * Add a tool to synchronize podcasts to mp3 player. You can create and add a m3u playlist. See [#Synchronizing_podcasts_to_MP3_player Synchronizing podcasts to MP3 player]. 
+  * 19/03/2012 : *Firenze 5.5.1 released* 
+    * Correction on resume partial downloads : some rss servers don t support this option (header field 'bytes'). Firenze tries to resume download and if it is not working downloads without resume
+    * Add support for Opml : you can import feed declaration from an opml file into your firenze configuration or export the feeds declared in your firenze configuration into an opml file. See [#Importing_subscriptions_from_an_OPML_File Import OPML] and  [#Exporting_subscriptions_to_an_OPML_File Export OPML]. 
+    * Add description attribute for setproperty and feed elements
+  * 15/03/2012 : *Firenze 5.4.1 released* 
+    * Add download condition on query parameter. See [#Setting_a_download_condition Setting a download condition]
+    * Add enclosureurl element : this element allows you to redefine the url of the enclosure to download : useful if the rss does not contain the url of the enclosures but only the links to the pages containing the content. See [#(Re)Defining_the_url_of_the_enclosure (Re)Defining the url of the enclosure]. 
+    * Add resume partial downloads support.
+    * Add support for specific protocols : more particularly now firenze can manage the `itunes` protocols like *itpc* and *itms*. List of protocols supported : 
+      * *feed://*
+      * *itms://*
+      * *itpc://*
+      * *pcast://*
+      * *podcast://*  
+    * Simplification of the minimal configuration : the settings and the download elements become optional. 
+    * Some performance enhancements in the evaluation of properties.
+    * *Modification of the configuration : xpathproperty is no longer used and replaced by setproperty. <font color="red">Please rename the xpathproperty elements into setproperty in your firenze configuration file : </font>*
+
+{{{
+<xpathproperty name="httpInfo" url="http://www.radiofrance.fr/franceinter/em/2000ansdhistoire/archives.php" 
+               default="$entry.title">   
+   //li[strong[. = '$slashPubDate']]/a/text()
+</xpathproperty>   
+}}}
+
+becomes
+
+{{{
+<setproperty name="httpInfo" url="http://www.radiofrance.fr/franceinter/em/2000ansdhistoire/archives.php" 
+               default="$entry.title">   
+   //li[strong[. = '$slashPubDate']]/a/text()
+</setproperty>   
+}}}
+
+  * 28/02/2012 : *Firenze 5.3 released* 
+    * Add https support, thanks to *Radu Mitrea* : now firenze can download enclosures hosted on a https server.
+
+  * 20/02/2012 : *Firenze 5.2 released* 
+    * Update library dependencies.
+    * Some performance enhancements.
+
+  * 18/10/2011 : *Firenze 5.1 released* 
+    * Some minor bug fixes and log enhancements.
+
+  * 07/10/2011 : *Firenze 5.0 released* 
+    * *Modification of the namespace : <font color="red">Please modify the root element in your firenze configuration file : </font>*
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+}}}
+
+instead of 
+
+{{{
+<firenze-config xmlns="http://berlios.de/ns/firenze/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://berlios.de/ns/firenze/ firenze-config.xsd ">  
+}}}
+
+    * Migration from berlios to google source code hosting.
+    * attribute logged renamed to debug in configuration
+    * conditional download change : by default all feed enclosures not already downloaded are downloaded (instead of by default all feed enclosures are downloaded). It means by default an enclosure cannot be downloaded twice now
+
+[http://code.google.com/p/firenze/wiki/OlderNews older news]
+
+=User guide=
+
+==Installing Firenze==
+  * For the current version of Firenze, you will need a [http://www.oracle.com/technetwork/java/javase/downloads/index.html JDK] version 6 or higher.
+  * download the latest binary distribution of Firenze [http://code.google.com/p/firenze/downloads/list here] and unpack it into some directory on your local file system. We call `FIRENZE_HOME` the directory you unpacked the distribution
+  * set the `JAVA_HOME` environment variable. This should be set to the directory where your JDK is installed
+  * Firenze is now installed properly
+
+==Running Firenze==
+  * Running Firenze is simple : just launch the batch `FIRENZE_HOME/firenze.bat` on Windows platform or `FIRENZE_HOME/firenze.sh` on Linux/Unix platform  . 
+  * The first time you launch firenze, the programm ask you for creating the firenze configuration file : just type 'y' (or 'Y'). Then follow the small wizard prompt to add your first feed. A file called *firenze-config.xml* has been created in your `FIRENZE_HOME` directory.
+  * edit the `FIRENZE_HOME/firenze-config.xml` file
+  * you can now add all your feeds ! 
+
+*Note :* You can create your firenze configuration file from an opml file (see [#Importing_subscriptions_from_an_OPML_File Import OPML]). 
+
+==Feed declaration attributes==
+  * *url* : url address of the podcast rss feed
+  * *id* : unique identifier of the feed : this attribute is optional (but it must be specified if you have two feeds with the same url).
+
+*Example of a simple firenze-config.xml*
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml"/>    
+  </feeds>
+</firenze-config>
+}}}
+
+You can declare several feeds. *Be careful ! The id attribute you can specify for a feed must be unique*. 
+
+*Example of a firenze-config.xml with several feeds*
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+    <feeds>
+      <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml"/>    
+      <feed id="The Business Week" url="http://www.businessweek.com/search/podcasts/thebusinessweek.rss"/>    
+      <feed url="http://www.europe1.fr/rss_export/feed/on-va-s-gener-laurent-ruquier"/>    
+    </feeds>
+  </firenze-config>
+}}}
+
+==Setting the destination sub-folder==
+The default download folder is `FIRENZE_HOME/downloads`. Set the settings element if you want to change it. See [#Setting_the_download_folder_and_the_maximal_simultaneous_downloa Setting the download folder].
+
+By default, the enclosures of a feed are downloaded in a same subdirectory of name the feed id. If the id of the feed is not specified, the title of the feed is used.
+
+You can set another name for this subfolder by adding a destinationfolder element like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml" 
+          description="Richard Fidler conversations">    
+      <destinationfolder>ABC - $feed.title</destinationfolder>
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+This element contains an expression .
+
+If a name in the expression starts with $ it references a Firenze property. 
+This property is replaced at runtime by the corresponding value. An expression can contain multiple properties and constant string.
+
+Here is the list of the main properties managed by Firenze. Note that all rss informations (including additional modules like itunes or media tags) are supported :
+
+|| *Name* || *Description* || *Type* || 
+|| $enclosure || current enclosure || SyndEnclosure || 
+|| $enclosure.length || enclosure length (in bytes) || long || 
+|| $enclosure.type || enclosure type || String || 
+|| $enclosure.url || enclosure URL || String || 
+|| $enclosureUrl || enclosure URL object || java.net.URL || 
+|| $enclosureIndex || zero-based index of the current enclosure in the entry || int || 
+|| $entry || current entry || SyndEntry || 
+|| $entry.author || entry author || String || 
+|| $entry.description || entry description || String || 
+|| $entry.link || entry link || String || 
+|| $entry.publishedDate || entry published date || java.util.Date || 
+|| $entry.title || entry title || String || 
+|| $entry.updatedDate || entry updated date || java.util.Date || 
+|| $entry.uri || entry uri || String || 
+|| $entryIndex || zero-based index of the current entry in the feed || int || 
+|| $entry_itunes.author || corresponding to itunes:author tag including in the item element || String || 
+|| $entry_itunes.keywords || corresponding to itunes:keywords tag including in the item element || String || 
+|| $entry_itunes.duration || corresponding to itunes:duration tag including in the item element || String || 
+|| $entry_itunes.subtitle || corresponding to itunes:subtitle tag including in the item element || String || 
+|| $entry_itunes.summary || corresponding to itunes:summary tag including in the item element || String || 
+|| $ext || extension of the destination file || String || 
+|| $feed || current feed || SyndFeed || 
+|| $feed.author || feed author || String || 
+|| $feed.copyright || feed copyright || String || 
+|| $feed.description || feed description || String || 
+|| $feed.encoding || feed charset encoding || String || 
+|| $feed.feedType || feed type || String || 
+|| $feed.language || feed language || String || 
+|| $feed.link || feed link || String || 
+|| $feed.publishedDate || feed published date || java.util.Date || 
+|| $feed.title || feed title || String || 
+|| $feed.uri || feed uri || String || 
+|| $feedId || feed identifier || String || 
+|| $feed_itunes.author || corresponding to itunes:author tag including in the channel element || String || 
+|| $feed_itunes.subtitle || corresponding to itunes:summary tag including in the channel element || String || 
+|| $feed_itunes.summary || corresponding to itunes:summary tag including in the channel element || String || 
+|| $file || destination java.io.File object || java.io.File || 
+|| $fileName || destination file name || String || 
+|| $filePath || destination file path || String || 
+|| $baseName || the name of the destination file without extension  || String || 
+|| $basePath || the path of the destination file without extension  || String || 
+|| $history || history associated with the current feed || HistoryData || 
+|| $history.lastDownloadDate || last download date for the current feed || java.util.Date || 
+|| $history.lastPubDate || last published date for the current feed || java.util.Date || 
+|| $history.downloadedUrls || list of downloaded urls for the current feed || java.util.List || 
+|| $urlFileName || enclosure file name based on the last part of the URL || String || 
+
+
+Firenze distribution supports [http://groovy.codehaus.org/ groovy], the most famous java scripting language. 
+
+Just add the attribute type to 'groovy' to mean that you want to use it in your expression. 
+
+The same example with the groovy syntax :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml" 
+          description="Richard Fidler conversations">        
+      <destinationfolder type="groovy">"ABC - "+$feed.title</destinationfolder>
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+Note : you can use complex expression by invoking method on property like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml" 
+          description="Richard Fidler conversations">      
+      <destinationfolder type="groovy">"ABC - "+$feed.title.substring(0, 5)</destinationfolder>
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+More generally, Firenze accepts all scripting languages supported by [https://scripting.dev.java.net/ java scripting framework]. 
+
+To use another scripting language <a href="">see here</a>.
+
+==Setting the destination file==
+By default, the destination file name is the same as on server (last part of the enclosure url). 
+
+You can set another file name by adding a destinationfile element like this ($ext references the extension of the enclosure. For example '.mp3') :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml" 
+          description="Richard Fidler conversations">    
+      <destinationfile>$entry_itunes.subtitle$ext</destinationfile>
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+The same example with the groovy syntax :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <destinationfile type="groovy">$entry_itunes.subtitle+$ext</destinationfile>
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+==Setting a download condition==
+By default only the feed enclosures not already downloaded are downloaded. It means an enclosure cannot be downloaded twice. Firenze stores in a history database the list of the urls of the downloaded enclosures for each feed. Firenze adds an enclosure to download if the url is not present in this list.
+But you can add a download condition to limit the number of enclosures to download 
+For all feeds, Firenze stores the following informations about the already downloaded enclosures in its history database (located in `USER_HOME/firenze/firenze-history.properties` or `FIRENZE_HOME/firenze-history.properties` (where `USER_HOME` is your home directory)) : 
+  * $history.lastPubDate : the more recent published date of the downloaded enclosures
+  * $history.lastDownloadDate : the more recent download (ie the last) date for this feed
+  * $history.downloadedUrls : list of the urls of the downloaded enclosures
+
+If you want to download only the most recent enclosures, add a downloadcondition element like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <downloadcondition type="groovy">$entry.publishedDate.after($history.lastPubDate)</downloadcondition>   
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+If you want to download all enclosures you don't have already, there is nothing to add (default behaviour).
+
+If you want to download only the first (top) enclosure in the feed, add a downloadcondition element like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <downloadcondition type="groovy">$entryIndex == 0</downloadcondition>   
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+If you want to download only the enclosures published on friday, add a downloadcondition element like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <downloadcondition type="groovy" 
+         description="download only if published on friday">$entry.publishedDate.isFriday()</downloadcondition>   
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+Sometime the url of the enclosure is very complex and contains lots of query parameters. It makes no sense to check the url of the enclosure but rather the value of one query parameter. 
+
+{{{
+<enclosure url="http://example.org/media/273073201426.mp3?date=20120314&amp;media_url=http%3A%2F%2Fexample.org%2Fmedia%2F273073201426.mp3" 
+   type="audio/mpeg"  />
+}}}
+
+In the example above the url of the enclosure contains 2 parameters and date parameter is dynamic. Firenze should be use only the media_url parameter value to compare the url. It can be made like this :
+
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <downloadcondition queryparam="media_url" />   
+    </feed>                                     
+  </feeds>
+</firenze-config>
+}}}
+
+
+
+==Defining a new Firenze property==
+You can define your own Firenze property. Your property can reference other existing properties. 
+
+If you use groovy, you can invoke a method to format it.
+
+For example, to format a date, you can invoke the format method with a pattern (accept a [http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html SimpleDateFormat] expression). 
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <setproperty name="myProps">Fidler$entry.title</setproperty>      
+      <setproperty name="fmtPubDate" type="groovy">$entry.publishedDate.format('ddMM')</setproperty>      
+      <destinationfile>$myProps$fmtPubDate$ext</destinationfile>
+    </feed>                   
+  </feeds>
+</firenze-config>
+}}}
+
+==Managing the ID3 mp3 tags of a downloaded enclosures==
+If the downloaded enclosure is a mp3 file, you can manage its ID3 tags by adding the mp3tags element. 
+
+For example you can just display the existing mp3 tags with the debug attribute like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <tagsmp3 debug="true" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+
+You can remove all existing ID3 MP3 tags with the remove attribute like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <tagsmp3 remove="true" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+You can also specify the value of each mp3 tag with a tagmp3 element like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <tagsmp3 remove="true">
+        <tagmp3 name="album">Richard Fidler</tagmp3>
+      </tagsmp3>
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+With the configuration above firenze removes all existing tags in the downloaded enclosures of the feed and then adds the album ID3 tag.
+
+Note that you can add expression in the tagmp3 element : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <tagsmp3 remove="true">
+        <tagmp3 name="album">Richard Fidler</tagmp3>
+        <tagmp3 name="songTitle">Richard Fidler $entryIndex $entry.title</tagmp3>
+      </tagsmp3>
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+
+Of course you can add groovy expression in the tag element by specifying the type attribute.
+
+Here is the list of the available ID3 mp3 tags :
+|| *Name* || *Type* || *Name* || *Type* || 
+|| album || String || artist || String || 
+|| band || String || comments || List of String || 
+|| composer || String || conductor || String || 
+|| discNumber || Number || durationSeconds || Number || 
+|| encodedBy || String || encoderSettings || String || 
+|| engineer || String || featuringList || String || 
+|| fileType || String || genreID || Number || 
+|| genreName || String || isAcapella || Boolean || 
+|| isCompilation || Boolean || isSoundtrack || Boolean || 
+|| lyricist || String || mediaType || String || 
+|| mixArtist || String || partOfSetCount || Number || 
+|| partOfSetIndex || Number || producer || String || 
+|| publisher || String || songTitle || String || 
+|| trackCount || Number || year || Number || 
+
+==Splitting a downloaded enclosures==
+If the downloaded enclosures is a mp3 file, you can split it into several parts by adding a splitmp3 element like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <splitmp3 deleteOnExit="true" range="00.00 15.00 25.00 35.00 EOF" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+The range attribute contains all the split points (MM.SS format or EOF to specify the end of file). You can set the attribute deleteOnExit to "true" if you want to delete the original file after splitting.
+
+Instead of range, you can specify the number splitting parts like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <splitmp3 deleteOnExit="true" nbParts="10" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+You can also specify the preferred size of each part (format MM.SS) like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <splitmp3 deleteOnExit="true" partSize="10.00" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+
+If you want to retrieve only the last ten minutes of the feed, add the attribute fromEnd like this : 
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <splitmp3 deleteOnExit="true" fromEnd="true" range="00.00 10.00" />
+    </feed>                        
+  </feeds>
+</firenze-config>
+}}}
+
+==Setting the download folder and the maximal simultaneous download==
+
+The download element is optional. You can add it in the settings element if you want to specify :
+  * *dir* : the download folder into which podcasts will be downloaded. By default all enclosures are downloaded into the `FIRENZE_HOME/downloads` directory.
+  * *maxdownloads* : maximal simultaneous downloads per session (recommended options range between 1 and 50, 5 is the default value). This setting can be very useful in improving download performance.
+
+==Defining a configuration for all feeds==
+These elements can be define for all feeds : 
+  * setproperty
+  * downloadcondition
+  * destinationfolder
+  * destinationfile
+Just add them in a global-feed element like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <settings>
+    <download dir="C:/downloads" maxdownloads="5"/>
+    <global-feed> 
+      <setproperty name="fmtPubDate" type="groovy">$entry.publishedDate.format('ddMM')</setproperty>      
+      <downloadcondition type="groovy">$entry.publishedDate.after($history.lastPubDate)</downloadcondition>   
+      <destinationfile type="groovy">$entry.title+$fmtPubDate+".mp3"</destinationfile>             
+    </global-feed> 
+  </settings> 
+  <feeds>
+    ...
+    ...
+  </feeds>
+</firenze-config>
+}}}
+By default, all feeds use the global feed settings. But each feed can then overridden some of these elements :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <settings>
+    <download dir="C:/downloads" maxdownloads="5"/>
+    <global-feed> 
+      <setproperty name="fmtPubDate" type="groovy">$entry.publishedDate.format('ddMM')</setproperty>      
+      <downloadcondition type="groovy">$entry.publishedDate.after($history.lastPubDate)</downloadcondition>   
+      <destinationfile type="groovy">$entry.title+$fmtPubDate+".mp3"</destinationfile>             
+    </global-feed> 
+  </settings> 
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <destinationfile type="groovy">"Fidler"+$entryIndex+"-"+$fmtPubDate+$ext</destinationfile>             
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+==More about Scripting language==
+By default, Firenze distribution provides [http://groovy.codehaus.org/ groovy], the most famous java scripting language. 
+
+Its syntax is very near from java. You can use it to define new property, set a download condition or destination file name and folder.
+
+You can invoke method (such as substring() or replace()) on a firenze property like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <settings>
+    <download dir="C:/downloads" maxdownloads="5"/>
+    <global-feed> 
+      <setproperty name="fmtPubDate" type="groovy">$entry.publishedDate?.format('ddMM')</setproperty>      
+      <setproperty name="dayInWeekDate" type="groovy">$entry.publishedDate?.format('EEEEEEEEEE')</setproperty>     
+      <downloadcondition type="groovy">$entry.publishedDate.after($history.lastPubDate)</downloadcondition>   
+      <destinationfile type="groovy">$entry.title+$fmtPubDate+".mp3"</destinationfile>             
+    </global-feed> 
+  </settings> 
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml">    
+      <downloadcondition type="groovy">$entry.publishedDate.after($history.lastPubDate) 
+           &amp;&amp; $dayInWeekDate == 'friday' &amp;&amp; ($entry.title =~ 'A special .Conversations.').find()
+      </downloadcondition>   
+      <destinationfile type="groovy">"Fidler"+$entry.title.substring(3)+$ext</destinationfile>             
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+You can use all operators provided by [http://groovy.codehaus.org/ groovy] : 
+  * Safe navigation operator : ?. to avoid null reference
+  * Elvis operator : ?: to simplify ternary operation
+  * Regular Expression Operators to find '=~' or to match '==~'
+
+More info about these useful operators [http://groovy.codehaus.org/Operators here]
+
+Note that the xml entities must be escaped in your scripts : type &amp;&amp; for a logical and.
+
+If your script contains special characters (like quote or &gt; and &lt;) you can use the CDATA notation to protect them :
+
+Firenze distribution provides groovy library. But it is possible to use another JSR-233 scripting languages. To use another scripting language :
+  * Copy the library of the language you want to use (for example bsh.jar for beanshell) in the `FIRENZE_HOME/lib` directory
+  * Add the extension (or the name) of the language in the attribute type of the xml property element where you want to use this language (for example bsh for beanshell).
+Here is the list of the other java scripting languages :
+
+==Extracting information from html page with xpath==
+Informations (for example title or subject of an enclosure) found in the feed is sometimes not enough. 
+
+It can be interesting to retrieve this info from another html page. 
+
+Firenze provides a mechanism to do that using the powerful [http://www.w3schools.com/xpath/default.asp xpath] language. 
+
+Define a setproperty element and set the following attributes :
+  * name : this is the name of the property which stores the extracted info.
+  * url : this is the url of the page to parse.
+  * default : the default value for the property if the info to extract is not found, this value can contain expression with properties
+
+Then define the text element which contains the xpath expression. This expression can contain others properties.
+
+Example of xpath : 
+
+`//td[. = '$entry.title']/td` : this expression finds the contents of the 'td' elements following a 'td' element which contains the value of variable $entry.title
+
+`//li[strong[. = '$slashPubDate']]/a/text()` : this expression finds the contents of the 'a' elements following a 'li' element which contains a strong element with the value of variable $slashPubDate
+
+Note : if the xpath evaluation returns more than one results, firenze takes only the first result.  
+
+You can learn more about xpath language [http://www.w3schools.com/xpath/default.asp here]
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://radiofrance-podcast.net/podcast/rss_14864.xml"> 
+      <setproperty name="httpInfo" url="http://www.radiofrance.fr/franceinter/em/2000ansdhistoire/archives.php" 
+                     default="$entry.title">   
+        //li[strong[. = '$slashPubDate']]/a/text()
+      </setproperty>   
+      <destinationfile type="groovy">"2000ans-"+$httpInfo+$ext</destinationfile>             
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+
+==Extracting the url of the enclosure to download from the content of entry==
+
+To increase the traffic of their sites, it is common that a rss feed does not contain any enclosure element. Sometimes the enclosures are only present in each article and not directly in the rss feed. Firenze can parse the content of each entry to extract the url of the enclosure you want to download.
+
+Here is an example of rss feed without enclosure elements :
+
+{{{
+...
+<item>
+  <title>my title</title>
+  <description>my description</description>
+  <link>http://www.example.fr/page.html</link>
+  <pubDate>Thu, 26 Jan 2012 19:00:00 +0000</pubDate>
+</item>
+...
+}}}
+
+The url of the desired content to download is present in the page of the article (here http://www.example.fr/page.html) :
+
+{{{
+...
+<param name="movie" value="http://www.example.fr/player.swf?loadmp3=true&urlmp3=http:/www.example.fr/media/content.mp3" />
+...
+}}}
+
+
+Firenze can extract the url of the desired content by adding an xpath property. Then define an enclosureurl element to specify the desired url you want to download :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+<feed url="http://www.example.fr/rss">
+  <setproperty name="newurl" url="$entry.link">
+    //param[@name='movie']/@value
+  </setproperty>   
+  <enclosureurl type="groovy">$newurl?.substringAfter('urlmp3=')</enclosureurl> 
+</feed>
+}}}
+
+==Having multiple configurations==
+Several users can share the same computer and each can use firenze with its personal configuration. 
+
+Just move your firenze-config.xml in `USER_HOME/firenze` (where `USER_HOME` is your home directory, create sub-folder firenze if it does not exist).
+
+First Firenze looks for a firenze-config.xml file in your home directory. 
+
+If not found, firenze looks for the default firenze-config.xml (located in `FIRENZE_HOME` directory).
+
+==Downloading news==
+
+Firenze can be used not only to download podcasts but also your feed articles.
+If you want to download articles from a feed just set the `type` attribute to `entry` like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml" type="entry"/> 
+  </feeds>
+</firenze-config>
+}}}
+
+Firenze downloads and manages the articles like the podcasts (ie download condition, destination file, folder, ...) 
+
+==Downloading news for offline reading==
+
+If you want to read your articles without internet connection, just set the `type` attribute to `entry-offline` like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml"
+          type="entry-offline"/> 
+  </feeds>
+</firenze-config>
+}}}
+
+Firenze will download the articles and save only the text with a minimalist stylesheet.
+
+
+==Connecting to Google Reader Account to download news==
+
+Firenze can connect to your Google Reader account to retrieve your reading list (ie list of unread news) :
+
+  * set the `type` attribute to `greader-entry`
+  * set the `username` and the `password` of your google reader account
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.google.com/reader/atom/user/-/state/com.google/reading-list"
+          type="greader-entry" username="xxx@gmail.com" password="xxx">
+      <destinationfile>${entry.title}.html</destinationfile>
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+
+*Note :* Google provides an API to customize the url of your reading list (see [http://code.google.com/p/pyrfeed/wiki/GoogleReaderAPI| GoogleReaderAPI]). 
+
+*Note :* If you want to read offline your articles from google reader set the `type` to `greader-offline-entry`
+
+==Using Google Reader feed archiving feature to retrieve an old news==
+
+Google Reader is more than a feed reader: it's also a platform for feed caching and archiving. That means Google Reader stores all the posts from the subscribed feeds and they're available if you keep scrolling down in the interface. It can be very useful if you want to retrieve an older news that is no more available in the original rss feed.
+
+Just enter this URL in the address bar of your browser :
+http://www.google.com/reader/atom/feed/FEED_URL?n=NUMBER_OF_ITEMS
+and replace FEED_URL with the address of your feed and NUMBER_OF_ITEMS with the maximal number of historical posts from the feed.
+
+For example, you can compare the result in your browser between this original feed :
+
+{{{
+http://www.abc.net.au/queensland/conversations/conversationspodcast.xml
+}}}
+
+and the google reader version :
+
+{{{
+http://www.google.com/reader/atom/feed/http://www.abc.net.au/queensland/conversations/conversationspodcast.xml?n=5000
+}}}
+
+You will notice that the original feed contains more less entries than the google reader feed. 
+
+So you can use google reader to retrieve your news, particularly if the news you want have disapperead from the original feed. Here is the configuration :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.google.com/reader/atom/feed/http://www.abc.net.au/queensland/conversations/conversationspodcast.xml?n=5000"
+          type="greader-entry" username="xxx@gmail.com" password="xxx">
+      <destinationfile>${entry.title}.html</destinationfile>
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+
+==Launching a command after download for media files==
+
+Firenze can execute some arbitrary scripts after a download has finished.
+
+There are some examples of useful post-download script for media files : 
+
+  * convert a video to an audio file
+  * reencode an audio file
+  * time stretching
+  * increase the volume of an audio file
+  * convert an article to an eBook file
+
+We advise you to use [http://ffmpeg.org/ ffmpeg] and [http://www.surina.net/soundtouch/soundstretch.html soundstretch] to process your files.
+The property `$filePath` contains the path of the current downloaded enclosure. The properties `$basePath` and `$baseName` can be useful to easily change the extension of the file.
+
+
+For example if you want to convert a video to an audio file, add a postdownloadaction element like this :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://radiofrance-podcast.net/podcast/rss_14864.xml"> 
+      <postdownloadaction description="convert to mp3">
+        C:\app\ffmpeg\bin\ffmpeg -i "${filePath}" -acodec libmp3lame -ab 96k "${basePath}.mp3"
+        del "${filePath}
+      </postdownloadaction>  
+    </feed>                   
+  </feeds>
+</firenze-config>
+}}}
+
+Note you have to install [http://ffmpeg.org/ ffmpeg] before. The second command deletes the original file.
+
+If you want to process an audio file for faster playback, add a postdownloadaction element like this :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://radiofrance-podcast.net/podcast/rss_14864.xml"> 
+      <postdownloadaction description="soundstretch">
+        C:\app\ffmpeg\bin\ffmpeg -i "${filePath}" "${basePath}.wav"
+        C:\app\soundstretch\soundstretch "${basePath}.wav" "${basePath}-fast.wav" -tempo=+50 -speech
+        del "${filePath}"
+        del "${basePath}.wav" 
+        C:\app\ffmpeg\bin\ffmpeg -i "${basePath}-fast.wav" -acodec libmp3lame -ab 96k "${filePath}"
+        del "${basePath}-fast.wav"  
+      </postdownloadaction>      
+    </feed>                   
+  </feeds>
+</firenze-config>
+}}}
+
+
+==Launching a command after download for news==
+
+Firenze can execute some arbitrary scripts after a download has finished.
+
+There are some examples of conversion scripts for news : 
+
+  * convert an article from html to pdf
+  * convert an article from html to eBook format
+
+We advise you to use [http://code.google.com/p/wkhtmltopdf/ wkhtmltopdf] , [http://www.amazon.com/kindleformat/kindlepreviewer kindlegen] and [http://www.willus.com/archive/#kindle k2pdfopt] to process your files.
+
+The property `$filePath` contains the path of the current downloaded file. The properties `$basePath` and `$baseName` can be useful to easily change the extension of the file.
+
+
+For example if you want to convert an article to pdf, just add a postdownloadaction element like this :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.oezratty.net/wordpress/feed/atom/" type="offline-entry">
+      <destinationfile>${entry.title}.html</destinationfile>
+      <postdownloadaction description="convert html to pdf">
+        C:\app\wkhtmltopdf\wkhtmltopdf.exe "${filePath}" "${basePath}.pdf"
+      </postdownloadaction>     
+    </feed>
+  </feeds>
+</firenze-config>
+}}}
+
+Note you have to install [http://code.google.com/p/wkhtmltopdf/ wkhtmltopdf] before.
+
+If you want to read your articles on eBook, just add a postdownloadaction element to convert the format like this :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://www.abc.net.au/queensland/conversations/conversationspodcast.xml"
+          type="entry-offline"> 
+      <postdownloadaction description="convert to kindle format">
+        C:\app\kindlegen\kindlegen.exe "${filePath}"
+      </postdownloadaction>      
+    </feed>                   
+  </feeds>
+</firenze-config>
+}}}
+
+Note : you have to install the [http://www.amazon.com/kindleformat/kindlepreviewer kindlegen] tool before.
+
+
+==Disabling a feed==
+You can temporarily disable a feed. 
+
+Firenze will not check this feed but your configuration will not be lost. Set the enabled feed attribute to "false".
+
+If you want then to re-enable this feed, set this attribute to "true" :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <feeds>
+    <feed url="http://podcast.rtl.fr/onrefaitlematch.xml" enabled="false"/>    
+  </feeds>
+</firenze-config>
+}}}
+
+==Setting a download timeout / Setting a proxy==
+It can be useful to abort very long download. 
+
+You can add a download timeout (in seconds).
+
+If you have a proxy, you can add the proxy host and port like this :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <settings>
+    <proxy host="host.myproxy" port="2525"/>        
+  </settings> 
+  ...
+</firenze-config>
+}}}
+
+You can use the system proxy configuration like this :
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">  
+  <settings>
+    <proxy useSystemProxies="true"/> 
+  </settings> 
+  ...
+</firenze-config>
+}}}
+
+==Synchronizing podcasts to MP3 player==
+You can easily synchronize your podcasts from your desktop to your MP3 player.
+
+  * Edit your firenze configuration to add the `sync` element in the `settings` :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">
+  <settings>
+    <sync extension=".mp3, .mp4" dest="G:/MP3 Player/Music, H:/MP3 Player/Music" backup="true" overriddenFile="true">
+      <playlist path="./playlist/playlist.m3u" overriddenFile="true"/>
+    </sync>
+  </settings>   
+  ...
+</firenze-config>
+}}}
+
+The `extension` and the `dest` attributes are mandatory. They contain respectively the list (comma-separated) of accepted extension and the list (comma-separated) of destination directories. You can specify more than one destination directory because it is not always the same disk assigned when you connect your MP3 player on your computer. Firenze will take the first available destination directory.
+
+If `overriddenFile` is set to false, Firenze will not replace the podcasts with the same name on your MP3 player. By default, `overriddenFile` is set to true.
+
+If `backup` is set to true, Firenze will move the podcasts on your computer in a `transferred` sub-folder. By default, `backup` is set to true.
+
+You can add a playlist if you want to create a playlist on your MP3 player. This playlist will contain all your podcasts copied to your player.
+
+  * When your configuration is complete and saved, launch the batch `FIRENZE_HOME/firenzeSync.bat` on Windows platform or `FIRENZE_HOME/firenzeSync.sh` on Linux/Unix platform .
+
+==Synchronizing articles to eBook or device==
+You can easily synchronize your articles from your desktop to your device (eBook, smartphone, laptop, ....)
+
+  * Edit your firenze configuration to add the `sync` element in the `settings` :
+
+{{{
+<firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
+                       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                       xsi:schemaLocation="http://code.google.com/p/firenze/ns/ firenze-config.xsd ">
+  <settings>
+    <sync extension=".pdf, .mobi" dest="G:/eBook/News, H:/eBook/News" backup="true" overriddenFile="true"/>
+  </settings>   
+  ...
+</firenze-config>
+}}}
+
+The `extension` and the `dest` attributes are mandatory. They contain respectively the list (comma-separated) of accepted extension and the list (comma-separated) of destination directories. You can specify more than one destination directory because it is not always the same disk assigned when you connect your device on your computer. Firenze will take the first available destination directory.
+
+If `overriddenFile` is set to false, Firenze will not replace the files with the same name on your device. By default, `overriddenFile` is set to true.
+
+If `backup` is set to true, Firenze will move the file on your computer in a `transferred` sub-folder. By default, `backup` is set to true.
+
+  * When your configuration is complete and saved, launch the batch `FIRENZE_HOME/firenzeSync.bat` on Windows platform or `FIRENZE_HOME/firenzeSync.sh` on Linux/Unix platform .
+
+
+==Importing subscriptions from an OPML File==
+You can create your firenze configuration file from an opml file. An OPML file contains URLs for all the feeds you are subscribed to. The OPML file format is a simple XML format that can be used to move feed subscriptions between different RSS-aware applications. 
+  * Export your podcast subscriptions to an OPML file : most of podcast clients or rss readers (itunes, gpodder or google reader) for example have an export command. 
+  * Copy it over to your device or computer
+  * Load it into firenze config with the import command : 
+
+{{{
+FIRENZE_HOME/firenze.bat -import=<path_to_your_ompl_file>
+FIRENZE_HOME/firenze.bat -import=C:\opml\google-reader-subscriptions.xml
+}}}
+
+==Exporting subscriptions to an OPML File==
+You can create an opml file from your firenze configuration file. The OPML file will contain URLs for all the feeds you are subscribed to. The OPML file format is a simple XML format that can be used to move feed subscriptions between different RSS-aware applications. 
+  * Launch the firenze export command : 
+
+{{{
+FIRENZE_HOME/firenze.bat -export=<path_to_your_ompl_file>
+FIRENZE_HOME/firenze.bat -export=C:\opml\firenze-subscriptions.xml
+}}}
+
+==Scheduling Firenze==
+Firenze is a command line utility, just add it in your preferred schedule service (at, crontab, etc ...) !
+
+=Examples=
+
+This [http://code.google.com/p/firenze/wiki/SimplestExampleOfFirenzeConfigXml firenze-config.xml] contains the minimal configuration for firenze.
+
+This [http://code.google.com/p/firenze/wiki/SimpleExampleOfFirenzeConfigXml firenze-config.xml] contains a simple configuration for firenze.
+    
+This [http://code.google.com/p/firenze/wiki/CompleteExampleOfFirenzeConfigXml firenze-config.xml] is a complete example.
+
+=Why Firenze ?=
+
+Becouse Firenze is a great town and this software uses [http://rometools.org/ ROME], the famous RSS and Atom Utilities java library.
+
+       [http://rometools.org/ https://rometools.jira.com/wiki/download/attachments/1998908/romelogo.png]
