@@ -1,52 +1,50 @@
 <wiki:toc max_depth="2" />
 
-=Getting notified of Firenze releases=
-You can subscribe to Firenze releases via this [http://code.google.com/feeds/p/firenze/downloads/basic RSS feed].
+=Être informé de la sortie d'une nouvelle version de Firenze=
+Abonnez-vous à ce [http://code.google.com/feeds/p/firenze/downloads/basic flux RSS].
 
-=Overview=
-Firenze is an open-source java command-line podcast aggregator.
+=Introduction=
+Firenze est un agrégateur : il permet de s'abonner à des flux rss et de télécharger des podcasts audio et video ainsi que des articles.
+Il s'agit d'un programme en ligne de commande et multi-plateforme.
 
-Firenze downloads and manages free audio or video content ("podcasts") and articles (news) for you.
-
-List of features :
-  * Croos-platform program (Java based)
-  * Multiple simultaneous downloads
-  * Resume partial downloads
-  * Scheduled downloads
-  * Simplicity and ease of use
-  * Command-line scriptable
-  * Conditional download : user-defined download condition
-  * Proxy server support
-  * Https support
-  * Support for specific protocols : *feed://* , *itms://* , *itpc://* , *pcast://* and *podcast://*
-  * User-defined destination file and folder name (support for all rss tags included [http://www.itunes.com itunes] tags)
-  * Highly configurable for advanced users with full support of [https://scripting.dev.java.net/ JSR-223 java scripting language] like [http://groovy.codehaus.org/ groovy].
+Liste des fonctionnalités :
+  * Multi-plateforme (écrit en java)
+  * Simple et facile à paramétrer et à utliser
+  * Téléchargements simultanés des podcasts (articles)
+  * Reprise des téléchargements incomplets
+  * Lancement en tâche planifiée
+  * Téléchargement conditionnel paramétrable par l'utilisateur
+  * Support des connexions internet via proxy
+  * Support du protocole https
+  * Support des protocoles spécifiques (itunes par exemple) : *feed://* , *itms://* , *itpc://* , *pcast://* and *podcast://*
+  * Configuration du nom de fichier de destination ainsi que du nom du répertoire de destination par l'utilisateur. Support de tous les tags rss, y compris les tags [http://www.itunes.com itunes].
+  * Support des [https://scripting.dev.java.net/ JSR-223 langage des scripting java] comme [http://groovy.codehaus.org/ groovy] dans le paramètrage
   * Extracting additional informations from http page with xpath support
-  * Importing and exporting your feed subscriptions (support OPML format)
-  * Podcast features : 
-    ** Managing ID3 mp3 tags
-    ** Split mp3 file after download
-    ** Launching a command after download (convert media content, timestretching, ...)
-    ** Synchronising podcasts to your mp3 player
-    ** Creation of playlist (support M3U format)
-  * News features : 
-    ** Offline reading mode (download only the text content of the news)
-    ** Support for google reader : access to your account, retrieve the unread news, use the googe reader archiving feature to retrieve an old news
-    ** Launching a command after download (conversion for eBook, ...)
-    ** Synchronising articles to your device (eBook, notebook, smartphone, ...)
+  * Importation et exportation de la définition des flux rss (au format OPML)
+  * Fonctionnalités propres aux podcasts: 
+    ** Gestion des tags ID3 pour les fichiers mp3 (en modification, suppression et ajout)
+    ** Découpage de fichier mp3 après téléchargement
+    ** Lancement de commandes après téléchargement (pour conversion par exemple)
+    ** Synchronasion des podcasts avec un lecteur audio mp3
+    ** Creation de playlist (au format M3U)
+  * Fonctionnalités propres aux articles : 
+    ** Gestion du mode déconnecté (téléchargement du contenu textuel uniquement pour une lecture ultérieure)
+    ** Support de google reader : accès au compte google reader, récupèration de la liste des articles non lus, utilisation de la fonctionnalité d'archivage de googe reader
+    ** Lancement de commandes après téléchargement (pour conversion par exemple)
+    ** Synchronisation des articles avec un appareil externe (eBook, notebook, smartphone, ...)
 
 
 =News=
 
   * 20/04/2012 : *Firenze 6.0 released* 
-    * fix url file name management
-    * simplify postdownloadactions : ability to group actions into the same element
-    * add baseName and basePath properties to simplify action
-    * the default destination folder is the title of the feed if the id is not set 
+    * correction dans la gestion du nom du fichier à partir de l'url
+    * simplification de postdownloadactions : possibilité des grouper les actions dans un seul élément
+    * ajout des propriétés `baseName` et `basePath` pour simplifier l'écriture des actions
+    * le répertoire par défaut est le titre du flux si l'id n'est pas setté. 
 
   * 20/04/2012 : *Firenze 5.9 released* 
-    * fix encoding management
-    * fix enclosureurl management
+    * correction dans la gestion de l'encoding
+    * correction dans la gestion de l'élément `enclosureurl`
 
   * 06/04/2012 : *Firenze 5.8 released* 
     * add news aggregator feature : you can retrieve articles from a feed.
@@ -128,27 +126,27 @@ instead of
 
 [http://code.google.com/p/firenze/wiki/OlderNews older news]
 
-=User guide=
+=Guide utilisateur=
 
-==Installing Firenze==
-  * For the current version of Firenze, you will need a [http://www.oracle.com/technetwork/java/javase/downloads/index.html JDK] version 6 or higher.
-  * download the latest binary distribution of Firenze [http://code.google.com/p/firenze/downloads/list here] and unpack it into some directory on your local file system. We call `FIRENZE_HOME` the directory you unpacked the distribution
+==Installer Firenze==
+  * Installer le [http://www.oracle.com/technetwork/java/javase/downloads/index.html JDK] version 6 or plus.
   * set the `JAVA_HOME` environment variable. This should be set to the directory where your JDK is installed
-  * Firenze is now installed properly
+  * Télécharger la dernière version de la distribution de Firenze [http://code.google.com/p/firenze/downloads/list ici] et extraire dans un répertoire de votre ordinateur. Nous appelons `FIRENZE_HOME` le répertoire où firenze est installé.
+  * Firenze est maintenant installé !
 
-==Running Firenze==
-  * Running Firenze is simple : just launch the batch `FIRENZE_HOME/firenze.bat` on Windows platform or `FIRENZE_HOME/firenze.sh` on Linux/Unix platform  . 
-  * The first time you launch firenze, the programm ask you for creating the firenze configuration file : just type 'y' (or 'Y'). Then follow the small wizard prompt to add your first feed. A file called *firenze-config.xml* has been created in your `FIRENZE_HOME` directory.
-  * edit the `FIRENZE_HOME/firenze-config.xml` file
-  * you can now add all your feeds ! 
+==Lancer Firenze==
+  * Lancer Firenze est facile : lancer juste le batch `FIRENZE_HOME/firenze.bat` sous Windows ou `FIRENZE_HOME/firenze.sh` sous Linux/Unix. 
+  * Lors du premier lancement, firenze vous demande de créer le fichier de configuration : taper juste 'y' (or 'Y'). Puis il faut se laisser guider par firenze pour ajouter votre premier flux. Un fichier *firenze-config.xml* a été créé dans votre répertoire `FIRENZE_HOME`.
+  * Editer le fichier `FIRENZE_HOME/firenze-config.xml`
+  * Vous pouvez maintenant ajout tous vos flux RSS ! 
 
-*Note :* You can create your firenze configuration file from an opml file (see [#Importing_subscriptions_from_an_OPML_File Import OPML]). 
+*Remarque :* Vous pouvez créer directement votre configuration firenze à partir d'un fichier OPML (voir [#Importing_subscriptions_from_an_OPML_File Import OPML]). 
 
-==Feed declaration attributes==
-  * *url* : url address of the podcast rss feed
-  * *id* : unique identifier of the feed : this attribute is optional (but it must be specified if you have two feeds with the same url).
+==Déclarer les attributs d'un flux RSS==
+  * *url* : l'url du flux rss (obligatoire)
+  * *id* : identifiant unique du flux : cet attribut est optionnel (il doit cependant être spécifié si vous définissez plusieurs flux pointant sur la même url).
 
-*Example of a simple firenze-config.xml*
+*Exemple simple de fichier firenze-config.xml*
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -159,9 +157,9 @@ instead of
 </firenze-config>
 }}}
 
-You can declare several feeds. *Be careful ! The id attribute you can specify for a feed must be unique*. 
+Vous pouvez bien sur déclarer plusieurs flux. *Rappelez-vous ! si vous spécifiez un identifiant, il doit être unique*. 
 
-*Example of a firenze-config.xml with several feeds*
+*Exemple de firenze-config.xml avec plusieurs flux*
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -175,13 +173,11 @@ You can declare several feeds. *Be careful ! The id attribute you can specify fo
   </firenze-config>
 }}}
 
-==Setting the destination sub-folder==
-The default download folder is `FIRENZE_HOME/downloads`. Set the settings element if you want to change it. See [#Setting_the_download_folder_and_the_maximal_simultaneous_downloa Setting the download folder].
+==Paramétrer le répertoire de destination==
+Le répertoire de destination par défaut est `FIRENZE_HOME/downloads`. Si vous voulez en spécifier un autre vous devez spécifier l'élément settings. Voir [#Setting_the_download_folder_and_the_maximal_simultaneous_downloa Paramétrer le répertoire de téléchargement].
 
-By default, the enclosures of a feed are downloaded in a same subdirectory of name the feed id. If the id of the feed is not specified, the title of the feed is used.
-
-You can set another name for this subfolder by adding a destinationfolder element like this :
-
+Tous les fichiers d'un flux sont téléchargés dans un sous-répertoire ayant pour nom l'identifiant du flux. Si l'identifiant n'est pas spécifié, le titre du flux est utilisé.
+Vous pouvez paramétrer un autre nom pour ce répertoire en ajoutant l'élément `destinationfolder` :
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -195,14 +191,12 @@ You can set another name for this subfolder by adding a destinationfolder elemen
 </firenze-config>
 }}}
 
-This element contains an expression .
+Cet élément contient une expression : si un nom dans une expression commence avec un $ alors il référence une propriété Firenze. 
+Cette propriété est remplacé lors de l'execution par la valeur correspondante. Une expressionp peut contenir plusieurs properiétés.
 
-If a name in the expression starts with $ it references a Firenze property. 
-This property is replaced at runtime by the corresponding value. An expression can contain multiple properties and constant string.
+Voici la liste des propriétés gérées par Firenze. Toutes les informations du flux sont utilisables (mêmes celles venant dem odules additionnels comme les tags itunes ou media) :
 
-Here is the list of the main properties managed by Firenze. Note that all rss informations (including additional modules like itunes or media tags) are supported :
-
-|| *Name* || *Description* || *Type* || 
+|| *Nom* || *Description* || *Type* || 
 || $enclosure || current enclosure || SyndEnclosure || 
 || $enclosure.length || enclosure length (in bytes) || long || 
 || $enclosure.type || enclosure type || String || 
@@ -251,11 +245,11 @@ Here is the list of the main properties managed by Firenze. Note that all rss in
 || $urlFileName || enclosure file name based on the last part of the URL || String || 
 
 
-Firenze distribution supports [http://groovy.codehaus.org/ groovy], the most famous java scripting language. 
+Firenze supporte [http://groovy.codehaus.org/ groovy], le célèbre langage de scripting java. 
 
-Just add the attribute type to 'groovy' to mean that you want to use it in your expression. 
+Ajouter juste le type à 'groovy' pour signifier que vous voulez l'utiliser pour évaluer une expression. 
 
-The same example with the groovy syntax :
+Voic le même exemple avec une syntaxe groovy :
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -270,7 +264,7 @@ The same example with the groovy syntax :
 </firenze-config>
 }}}
 
-Note : you can use complex expression by invoking method on property like this :
+Remarque : vous pouvez utiliser des expressions complexes en invoquant par exemple des méthodes sur les propriétés. Par exemple :
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -285,14 +279,13 @@ Note : you can use complex expression by invoking method on property like this :
 </firenze-config>
 }}}
 
-More generally, Firenze accepts all scripting languages supported by [https://scripting.dev.java.net/ java scripting framework]. 
+Plus généralement, Firenze accepte tous les langages de scripting supporté par [https://scripting.dev.java.net/ java scripting framework]. 
 
-To use another scripting language <a href="">see here</a>.
+Pour utiliser un autre langage de script <a href="">voir ici</a>.
 
-==Setting the destination file==
-By default, the destination file name is the same as on server (last part of the enclosure url). 
-
-You can set another file name by adding a destinationfile element like this ($ext references the extension of the enclosure. For example '.mp3') :
+==Paramétrer le fichier de destination==
+Par défaut, le fichier de destination est le même que sur le serveur (dernière partie de l'url). 
+Vous pouvez paramétrer un autre fichier de destination, par exemple (`$ext` référence l'extension du fichier, ici `$ext` vaut '.mp3')
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -307,7 +300,7 @@ You can set another file name by adding a destinationfile element like this ($ex
 </firenze-config>
 }}}
 
-The same example with the groovy syntax :
+Le même exemple en utilisant une syntaxe groovy :
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -321,15 +314,15 @@ The same example with the groovy syntax :
 </firenze-config>
 }}}
 
-==Setting a download condition==
-By default only the feed enclosures not already downloaded are downloaded. It means an enclosure cannot be downloaded twice. Firenze stores in a history database the list of the urls of the downloaded enclosures for each feed. Firenze adds an enclosure to download if the url is not present in this list.
-But you can add a download condition to limit the number of enclosures to download 
-For all feeds, Firenze stores the following informations about the already downloaded enclosures in its history database (located in `USER_HOME/firenze/firenze-history.properties` or `FIRENZE_HOME/firenze-history.properties` (where `USER_HOME` is your home directory)) : 
-  * $history.lastPubDate : the more recent published date of the downloaded enclosures
-  * $history.lastDownloadDate : the more recent download (ie the last) date for this feed
-  * $history.downloadedUrls : list of the urls of the downloaded enclosures
+==Paramétrer une condition de téléchargement==
+Firenze ne télécharge par défaut que les fichiers qui n'ont pas été déjà téléchargés. Cela signifie qu'un fichier ne peu pas être téléchargé 2 fois. Firenze conserve dans une base de données la liste des url des fichiers téléchargés pour chaque flux. Firenze ajoute un fichier à télécharger si l'url du fichier n'est pas déjà présente dans sa liste.
+Mais vous pouvez modifier ce comportement par exemple pour limiter le nombre de fichiers à télécharger. 
+Pour chaque flux, Firenze conserve les informations suivantes dans sa base (dans le fichier `USER_HOME/firenze/firenze-history.xml` ou `FIRENZE_HOME/firenze-history.xml` (où `USER_HOME` est votre répertoire personnel)) : 
+  * $history.lastPubDate : la date de publication la plus récente parmi celle des fichiers téléchargés
+  * $history.lastDownloadDate : la date de téléchargement la plus récente (ie la dernière) du flux
+  * $history.downloadedUrls : la liste de toutes les url des fichiers téléchargés
 
-If you want to download only the most recent enclosures, add a downloadcondition element like this :
+Si vous voulez télécharger seulement les fichiers les plus récents ajouter une condition come ceci : 
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -343,9 +336,9 @@ If you want to download only the most recent enclosures, add a downloadcondition
 </firenze-config>
 }}}
 
-If you want to download all enclosures you don't have already, there is nothing to add (default behaviour).
+Si vous voulez télécharger tous les fichiers que vous n'avez pas, il n'y a rien à faire (comportement par défaut). 
 
-If you want to download only the first (top) enclosure in the feed, add a downloadcondition element like this :
+Si vous voulez télécharger seulement le dernier fichier, ajouter une condition come ceci : 
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -359,7 +352,7 @@ If you want to download only the first (top) enclosure in the feed, add a downlo
 </firenze-config>
 }}}
 
-If you want to download only the enclosures published on friday, add a downloadcondition element like this :
+Si vous voulez télécharger seulement les fichiers publiés un vendredi, ajouter une condition come ceci : 
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -374,15 +367,14 @@ If you want to download only the enclosures published on friday, add a downloadc
 </firenze-config>
 }}}
 
-Sometime the url of the enclosure is very complex and contains lots of query parameters. It makes no sense to check the url of the enclosure but rather the value of one query parameter. 
+Parfois l'url d'un fichier est complexe et contient beaucoup de paramètres. Cela n'a pas de sens de controler l'url entièrement mais juste la valeur d'un paramètre de l'url.
 
 {{{
 <enclosure url="http://example.org/media/273073201426.mp3?date=20120314&amp;media_url=http%3A%2F%2Fexample.org%2Fmedia%2F273073201426.mp3" 
    type="audio/mpeg"  />
 }}}
 
-In the example above the url of the enclosure contains 2 parameters and date parameter is dynamic. Firenze should be use only the media_url parameter value to compare the url. It can be made like this :
-
+Dans l'exemple ci-dessus l'url contient 2 paramètres dont la date qui est dynamique. Firenze doit donc utiliser seulement media_url pour comparer l'url.
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -398,12 +390,9 @@ In the example above the url of the enclosure contains 2 parameters and date par
 
 
 
-==Defining a new Firenze property==
-You can define your own Firenze property. Your property can reference other existing properties. 
-
-If you use groovy, you can invoke a method to format it.
-
-For example, to format a date, you can invoke the format method with a pattern (accept a [http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html SimpleDateFormat] expression). 
+==Definir une nouvelle propriété==
+vous pouvez ajouter vos propres propriétés. Vos propriétés peuvent références des propriétés déjà existantes.
+Par exemple vous pouvez utiliser groovy pour formater une propriété existante (une date par exemple avec une expression [http://java.sun.com/j2se/1.5.0/docs/api/java/text/SimpleDateFormat.html SimpleDateFormat]). 
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -419,10 +408,10 @@ For example, to format a date, you can invoke the format method with a pattern (
 </firenze-config>
 }}}
 
-==Managing the ID3 mp3 tags of a downloaded enclosures==
-If the downloaded enclosure is a mp3 file, you can manage its ID3 tags by adding the mp3tags element. 
+==Gérer les tags mp3 ID3 mp3==
+Si le fichier téléchargé est un mp3, vous pouvez gérer les tags mp3 en ajoutant un élément mp3tags dans votre configuration. 
 
-For example you can just display the existing mp3 tags with the debug attribute like this :
+Si vous voulez juste afficher les tags mp3 d'un fichier :
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -436,7 +425,7 @@ For example you can just display the existing mp3 tags with the debug attribute 
 </firenze-config>
 }}}
 
-You can remove all existing ID3 MP3 tags with the remove attribute like this : 
+Vous pouvez supprimer tous les tags mp3 ID3 existants : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -448,7 +437,8 @@ You can remove all existing ID3 MP3 tags with the remove attribute like this :
   </feeds>
 </firenze-config>
 }}}
-You can also specify the value of each mp3 tag with a tagmp3 element like this : 
+
+Vous pouvez aussi ajouter des tags mp3 tag avec un élément tagmp3 : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -462,9 +452,8 @@ You can also specify the value of each mp3 tag with a tagmp3 element like this :
   </feeds>
 </firenze-config>
 }}}
-With the configuration above firenze removes all existing tags in the downloaded enclosures of the feed and then adds the album ID3 tag.
+Avec la configuration ci-dessous, Firenze supprime tous les tags du fichier puis ajoute le tag album.
 
-Note that you can add expression in the tagmp3 element : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -480,10 +469,10 @@ Note that you can add expression in the tagmp3 element :
 </firenze-config>
 }}}
 
-Of course you can add groovy expression in the tag element by specifying the type attribute.
+Vous pouvez bien sur ajouter des expressions et références des propriétés dans les éléments tagmp3: 
 
-Here is the list of the available ID3 mp3 tags :
-|| *Name* || *Type* || *Name* || *Type* || 
+Voici la liste des tags mp3 disponibles :
+|| *Nom* || *Type* || *Nom* || *Type* || 
 || album || String || artist || String || 
 || band || String || comments || List of String || 
 || composer || String || conductor || String || 
@@ -499,8 +488,8 @@ Here is the list of the available ID3 mp3 tags :
 || publisher || String || songTitle || String || 
 || trackCount || Number || year || Number || 
 
-==Splitting a downloaded enclosures==
-If the downloaded enclosures is a mp3 file, you can split it into several parts by adding a splitmp3 element like this : 
+==Découper un fichier mp3==
+Si votre fichier est un mp3 vous pouvez le découper en plusieurs parties : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -512,9 +501,9 @@ If the downloaded enclosures is a mp3 file, you can split it into several parts 
   </feeds>
 </firenze-config>
 }}}
-The range attribute contains all the split points (MM.SS format or EOF to specify the end of file). You can set the attribute deleteOnExit to "true" if you want to delete the original file after splitting.
+L'attribut range contient tous les points de coupe (au format MM.SS ou EOF si vous voulez spécifier la fin du fichier). Vous pouvez spécifier l'attribut deleteOnExit à "true" si vous voulez supprimer le fichier original à la fin.
 
-Instead of range, you can specify the number splitting parts like this : 
+Vous pouvez aussi spécifier le nombre de partie (au lieu des points de coupe) : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -526,7 +515,7 @@ Instead of range, you can specify the number splitting parts like this :
   </feeds>
 </firenze-config>
 }}}
-You can also specify the preferred size of each part (format MM.SS) like this : 
+Vous pouvez aussi spécifier la taille souhaiter pour chaque partie (au format MM.SS) : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -539,7 +528,7 @@ You can also specify the preferred size of each part (format MM.SS) like this :
 </firenze-config>
 }}}
 
-If you want to retrieve only the last ten minutes of the feed, add the attribute fromEnd like this : 
+Si vous voulez ne garder que les 10 dernières minutes d'un fichier, ajouter l'attribute fromEnd : 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -552,19 +541,19 @@ If you want to retrieve only the last ten minutes of the feed, add the attribute
 </firenze-config>
 }}}
 
-==Setting the download folder and the maximal simultaneous download==
+==Paramétrer le répertoire de téléchargement et le nombre maximal de téléchargement simultanés==
 
-The download element is optional. You can add it in the settings element if you want to specify :
-  * *dir* : the download folder into which podcasts will be downloaded. By default all enclosures are downloaded into the `FIRENZE_HOME/downloads` directory.
-  * *maxdownloads* : maximal simultaneous downloads per session (recommended options range between 1 and 50, 5 is the default value). This setting can be very useful in improving download performance.
+L'élément download est optionnel. Vous pouvez l'ajouter dans l'élément settings si vous vouez spécifier :
+  * *dir* : le répertoire de téléchargement dans lequel les fichiers vont être téléchargés. Par défaut les fichiers sont téléchargés dans `FIRENZE_HOME/downloads`.
+  * *maxdownloads* : le nombre maximal de téléchargement simultanés (5 par défaut). Ce paramètre peut être très utile pour améliorer les performances et diminuer le temps de traitement global.
 
-==Defining a configuration for all feeds==
-These elements can be define for all feeds : 
+==Définir une configuration pour tous les flux==
+Les éléments suivants peuvent être définis pour tous les flux : 
   * setproperty
   * downloadcondition
   * destinationfolder
   * destinationfile
-Just add them in a global-feed element like this :
+Il suffit d'ajouter ces élements dans l'élément global-feed :
 
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
@@ -584,7 +573,8 @@ Just add them in a global-feed element like this :
   </feeds>
 </firenze-config>
 }}}
-By default, all feeds use the global feed settings. But each feed can then overridden some of these elements :
+Ainsi tous les les flux auront accès à la propriété fmtPubDate et utiliseront la définition du fichier de destination et de la condition de téléchargement.
+Il est cependant possible de surcharger l'un ou l'autre de ces élément en le redéfinissant au niveau du flux :
 {{{
 <firenze-config xmlns="http://code.google.com/p/firenze/ns/" 
                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
@@ -605,7 +595,7 @@ By default, all feeds use the global feed settings. But each feed can then overr
 </firenze-config>
 }}}
 
-==More about Scripting language==
+==Un peu plus sur les langages de script==
 By default, Firenze distribution provides [http://groovy.codehaus.org/ groovy], the most famous java scripting language. 
 
 Its syntax is very near from java. You can use it to define new property, set a download condition or destination file name and folder.
